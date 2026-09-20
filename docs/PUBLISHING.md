@@ -30,8 +30,79 @@ bash tools/make_noicc.sh gray delivery/production/INTERIOR-r7.pdf INTERIOR-r7-GR
 bash tools/make_noicc.sh cmyk delivery/cover/WRAP-r7-fullbleed-rgb.pdf WRAP-r7-CMYK-noicc.pdf
 ```
 
-Needs Ghostscript. Verify a finished PDF is clean by confirming `OutputIntent` and
-`/ICCBased` are both absent.
+Needs Ghostscript. Verify a finished PDF before it goes anywhere near the upload form:
+
+```bash
+python3 tools/check_upload_pdf.py interior <file.pdf>   # wants DeviceGray, no profile
+python3 tools/check_upload_pdf.py cover    <file.pdf>   # wants DeviceCMYK, no profile
+python3 tools/check_upload_pdf.py any      <file.pdf>   # just tell me what this is
+```
+
+It reads the colour space and profile markers out of the bytes (raw and decompressed,
+so an `/ICCBased` inside an object stream cannot hide) rather than trusting the
+filename — which matters, because the three wraps in a `delivery/` folder look alike:
+
+| file | what it is |
+|---|---|
+| `<name>-rN.pdf` | the build — **DeviceRGB**, wrong colour space |
+| `<name>-rN-PDFX1a.pdf` | archival — **carries an OutputIntent**, i.e. the ICC profile IngramSpark objects to |
+| `<name>-rN-CMYK-noicc.pdf` | **the upload copy** |
+
+`collect_completed.py --check` runs the same check over everything in
+`completed-books/`, so a wrong-colour-space or profile-carrying print file fails there
+too instead of at the upload form.
+
+### The cover wrap
+
+```bash
+python3 tools/compose_wrap.py books/<slug>
+```
+
+Config-driven, from `books/<slug>/delivery/cover.yaml` (the twin of `ebook.yaml`).
+**You supply front cover art only** — the tool builds everything else on the wrap:
+the back panel, the spine, the EAN-13, and the full-bleed canvas.
+
+```
+│◄──────────── 2 × 6" + spine + 2 × 0.125" bleed ────────────►│
+┌──────────────────────┬─────────┬──────────────────────┐
+│      BACK PANEL      │  SPINE  │     FRONT PANEL      │ 9.25"
+│  blurb, author block │  title  │   (the supplied art) │
+│  photo, EAN-13       │  author │                      │
+└──────────────────────┴─────────┴──────────────────────┘
+```
+
+**The spine width is `pages × paper factor`,** so the interior must be final before
+the cover is built — re-cut the interior and the wrap is wrong. Only the two factors
+verified against accepted books ship in the tool:
+
+| stock | factor |
+|---|---|
+| `white50` | 0.002252 |
+| `cream50` | 0.0025 |
+
+Any other stock must set `paper.factor` explicitly, read off IngramSpark's own spine
+calculator. The tool refuses to guess, because guessing here wastes a print run.
+
+**The front art is placed scale-to-fill with a centre crop** into the 6.125 × 9.25"
+front panel (trim plus bleed). Art at the wrong aspect ratio loses its edges, so the
+build report prints the crop and the effective resolution:
+
+```
+  art      2452x3469px -> crop 2297x3469px (lost 6.3% w, 0.0% h)
+  art ppi  375.0 effective across the 6.125" front panel [OK]
+```
+
+Under 300 ppi it says so and gives the pixel dimensions to ask for. A square
+1024×1024 cover, for instance, loses a third of its width and lands at 110 ppi.
+`tools/cover_art_to_print_res.py` upscales art to clear the 300 ppi floor — it
+clears the spec and adds no detail, so prefer real resolution when it exists.
+
+The output is an RGB proof; run `make_noicc.sh cmyk` on it for the upload copy.
+
+Both factors were verified against books this pipeline has had accepted and printed.
+
+Verified by rebuilding every shipped wrap from config — each renders **pixel-identical**
+to the PDF that was accepted, across both paper stocks.
 
 ### The EPUB
 
@@ -97,9 +168,14 @@ you're still on the print tab.
 **The eBook interior must be an EPUB or .docx.** A PDF is rejected there. The eBook "page
 count" field is nominal; enter the print count to match.
 
-**The ICC-profile warning is non-blocking.** If "PDF CONTAINS ICC COLOR PROFILES" appears
-despite profile-free files, you can proceed — but order a printed proof and confirm the
-interior text prints solid black, not gray.
+**If "PDF CONTAINS ICC COLOR PROFILES" appears, check which file you uploaded first.**
+The usual cause is not a bad build — it is the archival `-PDFX1a.pdf` going up instead of
+the `-CMYK-noicc.pdf` upload copy, and the two differ by a filename. Run
+`python3 tools/check_upload_pdf.py cover <file.pdf>` on whatever you sent; if it comes back
+FAIL, go Back, upload the file from `completed-books/<nn-slug>/` instead, and do not tick
+the authorize-anyway box. The warning *is* non-blocking, so if the file genuinely checks
+out clean you can proceed — but then order a printed proof and confirm the interior text
+prints solid black, not gray.
 
 **Type the title once.** Entering it repeatedly is what made a title display three or four
 times on the product page.
