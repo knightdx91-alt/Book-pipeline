@@ -139,6 +139,9 @@ PY
 [ $? -ne 0 ] && FAIL=$((FAIL+1))
 
 [ -d "$ROOT/books/_template" ] && ok "books/_template/" || bad "books/_template/ missing — new-book.sh cannot scaffold"
+for t in style_check.py grammar_check.py voice_wear_check.py tic_report.py metaphor_check.py rhythm_check.py show_tell_check.py check_chapter.sh build_pdf.py; do
+  [ -f "$ROOT/books/_template/tools/$t" ] || bad "books/_template/tools/$t missing — new books would ship without that gate"
+done
 [ -d "$ROOT/books/_series-template" ] && ok "books/_series-template/" || warn "books/_series-template/ missing — new-series.sh cannot scaffold"
 
 # --- API keys (optional) ----------------------------------------------------
@@ -212,9 +215,9 @@ PY
 
   [ -f "$d/character-bible.md" ] \
     && ok "character-bible.md present" \
-    || warn "no character-bible.md — required architect deliverable (docs/CHARACTER-BIBLE.md)"
+    || warn "no character-bible.md — chapter writes are blocked until it exists; run: bash tools/ensure-character-bible.sh ${d#$ROOT/} and populate it (docs/CHARACTER-BIBLE.md)"
 
-  for f in tools/style_check.py tools/grammar_check.py tools/voice_wear_check.py; do
+  for f in tools/style_check.py tools/grammar_check.py tools/voice_wear_check.py tools/tic_report.py; do
     [ -f "$d/$f" ] && ok "$f" || warn "$f missing — copy it from books/_template/"
   done
 

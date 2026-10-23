@@ -19,6 +19,14 @@ You receive:
 
 You produce: One chapter of prose that a reader will remember tomorrow.
 
+## BEFORE WRITING — THE CHARACTER BIBLE MUST EXIST
+
+If the book folder has no `character-bible.md`, do not write the chapter yet. Run
+`bash tools/ensure-character-bible.sh <book-dir>` (copies the template stub), then populate it:
+one voice card per named character on the four axes, tic line "none", a DISTINCTNESS GUARANTEE and
+a sample line, drawn from foundation/outline/source and from every chapter already written. Only
+then write. (A PreToolUse hook blocks chapter writes for a book with no bible.)
+
 ## BEFORE WRITING — VOICE INHABITATION
 
 Before writing a single word, do this:
@@ -150,9 +158,15 @@ Every chapter must have:
 
 For applicable genres, include from the character's chaos profile in foundation.md:
 
-- **Irrelevant thought:** The character thinks about something that has nothing to do with the scene. It arrives uninvited. It leaves without comment. 1-2 sentences, max. No narrative justification.
+- **Irrelevant thought:** The character thinks about something that has nothing to do with the scene. It arrives uninvited, set off by something in the scene, and leaves without comment. 1-2 sentences, max, inside the moment, not a paragraph of its own. Optional, never on a schedule (see the ration rule below).
 - **Cognitive distortion in action:** The character's habitual thinking error shows up in a decision, reaction, or internal monologue. They catastrophize, or think in black-and-white, or assume they know what someone else is thinking.
-- **Unprompted memory:** A memory from the character's past surfaces at the wrong time. Concrete, sensory, emotionally loaded, but NOT connected to the current scene.
+- **Unprompted memory:** A memory from the character's past surfaces at the wrong time. Concrete, sensory, emotionally loaded — and **triggered by something in the scene** (a smell, a sound, an object, a gesture), even when what it remembers has nothing to do with the plot. It comes out of the scene and goes straight back into it, usually inside the paragraph rather than as a paragraph of its own.
+- **Ration and vary human noise (author ruling, 2026-10-19: "Wouldn't those memories break immersion? Vary them").** A chaos device on a fixed cadence is itself a tic: the reader learns to wait for "the memory paragraph". So:
+  - none of these is required in every chapter; a chapter with none is fine;
+  - a stand-alone memory paragraph (one that does not grow out of the scene) is not allowed; at most one longer memory every other chapter;
+  - never the same shape twice running (length, position, how it enters and how it leaves);
+  - never close a memory on a small loss of knowing ("nobody ever learned his name", "its name had gone");
+  - before adding one, look at the previous two chapters' memories and make this one different.
 - **Failed emotional management:** The character tries to control their emotion and FAILS. Not dramatically — small and human. Voice cracks. Eyes burn. Hand won't stop shaking.
 
 These moments are NOT plot points. They are HUMAN NOISE. They exist because people are not narrative vehicles.
@@ -231,12 +245,51 @@ grows across 30+ chapters keeps every voice distinct instead of drifting into sa
 entry:
 - Give them a distinctness signature on the four axes (worldview, syntax, evasion, physicality) and a
   one-sentence **DISTINCTNESS GUARANTEE**.
-- **Check the TIC BUDGET first.** Do NOT hand the newcomer a verbal tic unless they are being added to
-  the ≤2–3-character tic-bearer roster on purpose. Default to "no tic — distinguished by <axis>."
-- **No device collision.** Verify the new voice does not reuse a DEVICE already assigned to an existing
-  character (counting/listing/pricing/rating/cataloguing are one device) — if it would, differentiate
-  before you finalize. Watch especially for the protagonist's signature device bleeding onto others
-  (the "everyone quantifies" failure): a secondary character must NOT borrow the narrator's habit.
+- **NO TICS (author's standing law, every book).** Never hand anyone — newcomer, principal, or the
+  narrator — a verbal tic, catchphrase, refrain or pet phrase. The tic line is always "none —
+  distinguished by <axis>." If you notice a line of yours wanting to come back a third time, that
+  is a tic forming: vary it or cut it before you finalize.
+- **No devices.** Counting/listing/pricing/rating/cataloguing are one device in different coats and it
+  is retired for everyone. Watch especially for the narrator's habits bleeding onto others (the
+  "everyone quantifies" failure): a secondary character must NOT borrow the narrator's way of noticing.
+- **Gestures are tics too.** Stage business repeated with the wording varied is still a tic: nobody
+  keeps picking things up and setting them down, nodding, swallowing, sighing, looking away, or
+  pausing "for a long moment". Use a beat ONCE and then find a different thing for the body to do —
+  or no beat at all (a line can stand without a gesture). Never more than 3 of one gesture class in a
+  chapter; across chapters, rotate.
+- **Rhythm and voice reflexes are gated too.** In narration, sentences with four or more "and"s are
+  capped at max(9, words ÷ 900) per chapter: one designed held sentence is a device, a dozen is a
+  default rhythm, so split action into shorter sentences. If the book defines `CREDENTIAL_PATTERNS` in
+  its `tools/tic_report.py`, the narrator's habit of filing what she sees under her own expertise is
+  capped at 4 per chapter. Let most sights stand on their own.
+- **No negation pivots.** "The mule did not pull; she sat back" and "It was not a large laugh; it was…"
+  define a thing by what it isn't, then correct it. Say what happened. The gate caps it at 1 per chapter
+  and fails at 3 book-wide.
+- **Narrator moves wear out.** At most one paragraph per chapter opens "So I…", and at most one "before
+  I had decided/thought". If the last few chapters each had a "So" opener, give this one none.
+  Don't move the habit sideways: paragraphs opening "Then…", "After that…" or "Afterward…" count as the
+  same hinge (max(3, words ÷ 2,500) per chapter, all forms together). Open on the thing itself.
+- **Props never do the acting.** No single object handled three times within 400 words (turned in the
+  fingers, set down, picked up, taken off, put back). If a character needs a beat between lines, give
+  them something new to do, or no beat.
+- **Run the ECHO SCAN on your draft before you finish:** `python3 tools/tic_report.py --echoes N` from the
+  book folder lists every phrase in your chapter that an earlier chapter already used. A second use is
+  where a tic starts; vary every hit that is not an allowlisted motif.
+- **The gates will catch it anyway:** `voice_wear_check.py` fails on a phrase repeated across chapters,
+  `tic_report.py --gate` on any phrase recurring 3+ times book-wide AND on any gesture class that
+  clusters (4+ in a chapter, or > 0.3 per 1,000 words book-wide) — so write it clean the first time.
+- **Figurative restraint (pipeline standard, from The Hour of Ash):** comparisons are *characterizing*
+  only (they make the reader see or smile), never analytical (never interpreting a feeling); ≤1 "as if /
+  as though" per chapter; no comparison used twice in the book; no metaphor-stacking; no closing
+  aphorism; ≤1 present-tense generalisation in past narration; em-dash ≤4 per chapter. Under real fear,
+  grief or at a climax, drop comparisons altogether. Honour each character's figurative rule on their card.
+- **Narrated states count like gestures.** Do not note the same physical state of one character (eyes
+  closed, waiting, a trembling hand, staying still, turning on a stool) more than 3 times in a chapter,
+  and never 3 inside ~500 words. Infants and animals get no borrowed adult moods.
+- **Nothing on the bible's SPENT / CLOSED lists comes back,** in any words. Read them before you draft.
+- **One command runs every mechanical gate:** `bash tools/check_chapter.sh N` from the book folder. It
+  must print ALL MECHANICAL GATES CLEAN before you hand the chapter over (if the book predates it, copy
+  it and its three companion gates from `books/_template/tools/`).
 If the architect built the bible under a different filename (e.g. voice cards inside `voice-dna.md`),
 add the entry there and note it; the point is one canonical, growing home for cast distinctness.
 
@@ -341,7 +394,7 @@ Write the chapter to `manuscript/chapters/chapter-[N].md` with this header:
 [Chapter prose begins here]
 ```
 
-After writing, save a self-report to `manuscript/chapters/chapter-[N]-report.md`:
+After writing, save a self-report to `manuscript/reports/chapter-[N]-report.md` (never inside `chapters/` — the mechanical gates glob `chapter-*.md` there):
 
 ```markdown
 # Writer Report: Chapter [N]

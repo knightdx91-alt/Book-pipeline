@@ -38,31 +38,43 @@ books/<slug>/
 ├── foundation.md              # characters, theme-as-question, anchors, opening strategy
 ├── outline.md                 # macro-structure + per-chapter plan
 ├── voice-dna.md               # global voice, differentiation matrix, anti-pattern budget
-├── character-bible.md         # cast VOICE/distinctness — ADD every new named character (tic budget)
+├── character-bible.md         # cast VOICE/distinctness — ADD every new named character (no tics, ever)
 ├── ENTITY_STATE.yaml          # entity-tracker's structured canon (facts, timeline, who-knows-what)
 ├── research/                  # staged source: original draft, story/series bible, roadmap
 ├── manuscript/chapters/       # chapter-1.md ... chapter-N.md (the book)
 ├── evaluations/               # per-chapter eval reports + continuity/ audits
 ├── feedback/progress.md       # exact resume point
 ├── delivery/                  # editorial package + production files
-└── tools/style_check.py       # style gate (edit ALLOWLIST for this book's motifs)
+└── tools/                     # the gate kit: check_chapter.sh runs them all; edit style_check.py
+                               # ALLOWLIST for this book's motifs, and set DEFAULT_POV in voice_wear_check.py
 ```
 If this book is part of a series, it sits under `books/<series-slug>/<book-slug>/` and also
 answers to the series bible — see `docs/SERIES.md`.
 
 ## How to continue
-1. `cd books/<slug>` and read `STATE.yaml` and `feedback/progress.md`.
+1. `cd books/<slug>` and read `STATE.yaml` and `feedback/progress.md`. If there is no
+   `character-bible.md`, create and populate it first (from the repo root:
+   `bash tools/ensure-character-bible.sh books/<slug>`) — chapter writes are blocked until it exists.
 2. `ls manuscript/chapters/` and `git log --oneline` to find the last finalized chapter.
 3. Produce the next chapter IN ORDER. On a revise run, locate its material in `research/`
    and REVISE/EXPAND to the roadmap beats — do not invent from scratch. Match the locked
    Ch.1 voice if one exists. Run each chapter through: write → dialogue-polish → hook-craft
-   → disruptor → evaluate → quality gate.
+   → disruptor → entity-tracker UPDATE + continuity-guardian audit (EVERY chapter, against all
+   prior chapters) → editor repair → `tools/check_chapter.sh N` → evaluate → quality gate →
+   sync the character bible's SPENT / CLOSED lists to the final page.
 4. Commit per chapter: `git add -A && git commit -m "genesis: finalize chapter N"`.
 
 ## Quality gates (all must pass before a chapter is "done")
 - **Genesis Floor ≥ 8.5** (book-evaluator); below → book-editor polish loop (max 5).
-- **Style check** — `python3 tools/style_check.py` clean: simile ≤4/1k, em-dash ≤~10/1k,
-  no NEW cross-chapter repeated phrase (add deliberate motifs to ALLOWLIST), tics under ceiling.
+- **Every mechanical gate in one command** — `bash tools/check_chapter.sh N` must print
+  `ALL MECHANICAL GATES CLEAN` (it exits non-zero otherwise).
+- **Style check** — `python3 tools/style_check.py` clean: simile ≤4/1k, em-dash ≤4 per chapter
+  (absolute), **foreshadowing 0** (pipeline default), no NEW cross-chapter repeated phrase (add
+  deliberate motifs to ALLOWLIST), tics under ceiling.
+- **Figurative restraint (pipeline standard)** — characterizing comparisons only, never analytical;
+  ≤1 "as if/as though" per chapter; no comparison used twice in the book; no metaphor-stacking or
+  closing aphorism; `python3 tools/metaphor_check.py N` under its ceilings. Full list:
+  `docs/QUALITY-GATES.md` → "The figurative-restraint standard".
 - **Grammar check** — `python3 tools/grammar_check.py` clean (tier 1 gates: doubled words,
   space-before-punctuation, a/an mismatch).
 - **Motif cap (author standing rule)** — no signature narrative tic-phrase may recur more than
@@ -70,8 +82,10 @@ answers to the series bible — see `docs/SERIES.md`.
   declaring a motif does NOT license unlimited use. Entries are `"phrase"` (cap 3) or
   `("phrase", N)` to raise the cap for a genuinely load-bearing image (keep overrides rare/small).
   The gate FAILS if any motif exceeds its cap.
-- **Tic budget** — `character-bible.md` §TIC BUDGET holds: ≤2–3 tic-bearing characters in the
-  whole book, no two characters sharing a device.
+- **NO TICS (author's standing law)** — `character-bible.md` records `Tic-bearer roster: NONE`:
+  no character, narrator included, carries a verbal tic, catchphrase, refrain or device.
+  `python3 tools/voice_wear_check.py` (self-repetition FAILS) and `python3 tools/tic_report.py
+  --gate` (any non-allowlisted phrase 3+ times book-wide FAILS) run every chapter.
 
 ## Word floor
 Finished book ≥ `manuscript_min_words` (see STATE.yaml). Verify:

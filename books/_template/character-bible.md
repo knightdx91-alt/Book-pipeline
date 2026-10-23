@@ -20,18 +20,31 @@ Distinguish characters on **four axes** first:
 3. **Evasion** — what they will NOT say (subject, register, or feeling they refuse).
 4. **Physicality / silence** — the body-tell or pause that stands in for a spoken tic.
 
-## TIC BUDGET (hard — the anti-"everyone has a catchphrase" rule)
+## NO TICS (author's standing law, 2026-10-18 — hard, every book)
 
-- **≤2–3 characters in the WHOLE BOOK** may LEAD with a verbal tic, and each must be EARNED (the
-  character's psychology surfacing). List them here. **Tic-bearer roster:** _<fill: e.g. "NAME (device), NAME (device)">_
-- **No two characters share a DEVICE.** Counting, listing, pricing, rating, cataloguing are the SAME
-  device in different coats — one character each. **One-device-per-character map:** _<fill>_
-- **No signature repeats across the author's other books** (cross-book pattern rule).
+- **Tic-bearer roster: NONE.** No character — narrator included — leads with a verbal tic,
+  catchphrase, refrain or pet phrase. Every card's tic line reads `none — distinguished by <axis>`.
+- **No devices.** Counting, listing, pricing, rating, cataloguing are one device in different coats,
+  and it is retired for everyone — not rationed to one character.
+- **Motifs are objects and situations, never lines.** The style-gate ALLOWLIST holds ≤5 phrases, each
+  capped at 3 uses book-wide.
 - **THE AMELIA LESSON:** in an earlier book a quantifying/counting device and the phrase "never once"
   calcified into a tic AND bled across characters until the cast sounded alike, needing a
-  manuscript-wide de-tic. Prevent it by construction. Watch that the POV narrator's signature device
-  does NOT bleed onto secondary characters.
-- **Retired / at-risk phrases** (the Writer and `voice_wear_check.py` catch these early): `never once`, _<add per book>_
+  manuscript-wide de-tic. The earned tics spread too — hence zero. Watch that the POV narrator's
+  habits do NOT bleed onto secondary characters.
+- **Enforced every chapter:** `voice_wear_check.py` (self-repetition FAILS), `tic_report.py --gate`
+  (any non-allowlisted phrase 3+ times book-wide, or any spoken 3+-word phrase recurring, FAILS).
+- **Retired / at-risk phrases** (fail on sight): `never once`, _<add per book>_
+- **SPENT / CLOSED ledger (kept at every chapter's bible sync).** After each chapter is final, log in an
+  `At-risk after Ch.N` block every distinctive move the page used: images, comparison frames, a
+  character's body-channel (how they laugh, cry, go still), set pieces, spoken lines, and narrated
+  states. Mark each USED (n of cap), SPENT (no more uses) or CLOSED (never again, in any words), and
+  log the strings later passes cut as CUT (never restore). The writer and every reviser read this
+  before touching a chapter. It is what stops a long book from rebuilding its best moments.
+- **Figurative rule per character.** Each card says how that character compares things, if at all
+  (e.g. "never uses a simile in speech"). Narration follows the voice-dna figurative standard.
+- **Narrated states count like gestures:** no character's physical state noted more than 3 times in a
+  chapter; infants and animals get no borrowed adult moods.
 
 ## Voice-card format (one per named character)
 
@@ -42,7 +55,7 @@ Distinguish characters on **four axes** first:
 - Syntax fingerprint: [sentence length & clause habits]
 - Evasion — never says: [what they refuse]
 - Physicality / silence: [the body-tell or pause]
-- Verbal tic: [none for most — "none, distinguished by <axis>"; fill ONLY if a designated tic-bearer]
+- Verbal tic: none — distinguished by <axis>   (ALWAYS none; the no-tics law)
 - DISTINCTNESS GUARANTEE: [one sentence — sharpest marker + what it contrasts against]
 - Sample line: [one line only this character could say]
 ```

@@ -4,7 +4,7 @@ The pipeline's working vocabulary, in one place.
 
 **Amelia Lesson** — the named precedent for tic calcification: a counting device and the
 phrase "never once" hardened into a tic and then bled across the cast until everyone sounded
-alike, requiring a manuscript-wide de-tic. Why the tic budget and the retired-phrase list
+alike, requiring a manuscript-wide de-tic. Why the no-tics law and the retired-phrase list
 exist. See [CHARACTER-BIBLE.md](CHARACTER-BIBLE.md).
 
 **Anti-pattern budget** — genre-adjusted density ceilings (per 1,000 words) for explanatory
@@ -19,6 +19,9 @@ generously: max +0.5 per revision cycle, cited evidence per score, challenge any
 **Character chaos** — the deliberate irrationality that makes a character read as a person:
 an irrelevant thought, a visible cognitive distortion, an unprompted memory, a failure of
 emotional management. Literary fiction and memoir cap at 7.5 on Characters without it.
+It must never run on a schedule: a memory or thought is triggered by something in the scene and goes back
+into it, and the same device in the same shape chapter after chapter is itself a tic. A stand-alone memory
+paragraph that drops in from nowhere breaks immersion (author ruling 2026-10-19).
 
 **Chapter loop** — steps A–G run per chapter, strictly sequential: write → dialogue-polish
 → hook-craft → disruption → (entity update) → mechanical preprocess → evaluate → gate.
@@ -115,8 +118,10 @@ the beats; the book *total* is the only word gate.
 **Theme as question** — a book asks; it never answers. The architect writes the theme as an
 interrogative and the ending refuses to resolve it into a moral.
 
-**Tic budget** — at most 2–3 characters in a whole book may lead with a verbal tic, each
-earned; no two characters share a device; no signature repeats across your other books.
+**No-tics law** (formerly the "tic budget") — the author's standing rule, every book: no
+character, narrator included, carries a verbal tic, catchphrase, refrain or device. Motifs
+are objects and situations, never lines; allowlisted phrases are capped at 3 uses. Enforced
+by `voice_wear_check.py`, `tic_report.py --gate` and the evaluator every chapter.
 
 **Tomorrow Test** — what concrete anchors does a reader still remember tomorrow? Counts both
 image and quote anchors; a CVI-Launch input.

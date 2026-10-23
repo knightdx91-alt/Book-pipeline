@@ -62,6 +62,16 @@ Do NOT use slash-command syntax (`/agent-name`). Do NOT invent names. If you can
 
 Everything between checkpoints runs AUTOMATICALLY.
 
+### FULL AUTONOMY MODE (no checkpoints)
+
+If `STATE.yaml` carries `autonomy: full`, or the dispatch prompt says FULL AUTONOMY, the three
+checkpoints do **not** pause. At each one, write the summary you would have shown the user into
+`{path}/feedback/progress.md` under a heading `## CHECKPOINT n — auto-passed <date>`, make the
+call yourself (the author's settled decisions in STATE.yaml are binding; anything they left open
+you decide and LOG under `decisions:`), and continue straight into the next phase. The run keeps
+going — chapter after chapter, each one through the full loop and the quality gate — until the
+manuscript is complete or the author says stop. Never ask "shall I continue?" in this mode.
+
 ## THE PIPELINE
 
 ```
@@ -136,6 +146,13 @@ PROJECT INITIALIZATION below.
 chapter. Continue from the next unwritten chapter, or from the phase after the last one
 completed.
 
+**Character bible gate (every run mode).** If the book folder has no `character-bible.md`, create
+it BEFORE any chapter is written or revised: `bash tools/ensure-character-bible.sh <book-dir>`
+copies the template stub, then dispatch book-architect to populate it — one voice card per named
+character, seeded from foundation/outline/source and from every chapter already written (an
+in-progress book's cards must match how the cast actually reads on the page). A PreToolUse hook
+(`require-character-bible.sh`) blocks chapter writes until the file exists.
+
 ### Resume table — which phase to start from
 
 | If this is missing | Start at |
@@ -178,7 +195,7 @@ books/{slug}/                      # or books/{series-slug}/{slug}/ for a series
 ├── foundation.md
 ├── outline.md
 ├── voice-dna.md
-├── character-bible.md             # cast VOICE + distinctness + TIC BUDGET (architect seeds, writer maintains)
+├── character-bible.md             # cast VOICE + distinctness, NO-TICS law (architect seeds, writer maintains)
 ├── reader-personas.md
 ├── voice-bank/
 │   ├── README.md
@@ -277,7 +294,7 @@ Read: {path}/foundation.md (character profiles + VOICE UNDER PRESSURE), {path}/r
 
 Produce {path}/voice-dna.md with all five sections:
 1. Global narrative voice (POV, sentence architecture, metaphor domain, prose register, voice-under-pressure)
-2. Per-character voice cards (vocabulary band, syntax fingerprint, rhythm, verbal tics, 'never says', sample line)
+2. Per-character voice cards (vocabulary band, syntax fingerprint, rhythm, 'never says', physicality, sample line — NO verbal tics, ever)
 3. Voice differentiation matrix (cover-the-name pre-solved; min 3 distinguishing markers per character pair)
 4. Anti-pattern budget, genre-adjusted (Pattern #11 ceiling per 1K words: literary ≤3 / commercial ≤4 / thriller ≤6 / other ≤8; adverbs-in-tags near-zero; 'as if' ceiling; metacognitive ceiling; emotional-temperature ceiling — what the Writer aims under and the Disruptor cuts down to)
 5. Benchmark samples
@@ -285,9 +302,9 @@ This document is PRESCRIPTIVE and EXECUTABLE — the Writer, dialogue-polish, an
 Write to: {path}/voice-dna.md
 
 ALSO REQUIRED (your §3b): seed {path}/character-bible.md — one voice card per named character,
-each ending in a DISTINCTNESS GUARANTEE, plus the explicit TIC BUDGET (the ≤2-3-character
-tic-bearer roster, the one-device-per-character map, the retired/at-risk phrase list) and the
-cast-wide distinctness matrix. The Writer keeps this file current as new characters appear."
+each ending in a DISTINCTNESS GUARANTEE, with the NO-TICS law made explicit (Tic-bearer roster:
+NONE; no devices for anyone; the retired/at-risk phrase list) and the cast-wide distinctness
+matrix. The Writer keeps this file current as new characters appear."
 ```
 
 After agent returns: verify voice-dna.md **and character-bible.md** exist (the bible is a required
@@ -336,11 +353,11 @@ For EACH chapter (1 through N), in order, run Steps A–G to completion before s
 Dispatch: book-writer
 Prompt: "Write chapter {N} of '{title}'.
 Project dir: {path}
-Read: {path}/outline.md for this chapter's plan (emotional anchor: {anchor}, emotional surprise: {surprise}, structural approach: {approach}).
+Read: {path}/outline.md for this chapter's plan (emotional anchor: {anchor}, emotional surprise: {surprise}, structural approach: {approach}, opening move: {open_move}, ending move: {end_move} — from the outline's Anti-Predictability Ledger).
 Read: {path}/voice-dna.md for voice specs. FOLLOW THEM.
-Read: {path}/character-bible.md for the cast's voice cards + the TIC BUDGET. Any NEW named
-character who speaks or acts on the page gets an entry ADDED there before you finalize — and the
-tic budget is a hard ceiling, not a suggestion (most characters carry NO verbal tic).
+Read: {path}/character-bible.md for the cast's voice cards + the NO-TICS law. Any NEW named
+character who speaks or acts on the page gets an entry ADDED there before you finalize — and
+nobody, the narrator included, carries a verbal tic, catchphrase or device (author's standing law).
 Read: {path}/voice-bank/ for voice reference.
 Read: {path}/ENTITY_STATE.yaml for canonical facts and who-knows-what.
 {If N>1: Read {path}/manuscript/chapters/chapter-{N-1}.md (the FINALIZED previous chapter) for continuity.}
@@ -351,7 +368,7 @@ Secondary characters in this chapter: {names}. Give each ONE moment of their own
 Pattern #11 prevention: write similes RAW; do not extend them. Prevention > detection.
 
 Write to: {path}/manuscript/chapters/chapter-{N}.md
-Write self-report to: {path}/manuscript/chapters/chapter-{N}-report.md"
+Write self-report to: {path}/manuscript/reports/chapter-{N}-report.md  (NOT into chapters/ — the mechanical gates glob chapter-*.md there)"
 ```
 
 **Step B — Dialogue Polish:**
@@ -359,7 +376,7 @@ Write self-report to: {path}/manuscript/chapters/chapter-{N}-report.md"
 Dispatch: dialogue-polish
 Prompt: "Dialogue-only editing pass on chapter {N} of '{title}'.
 Project dir: {path}
-Read: {path}/manuscript/chapters/chapter-{N}.md, {path}/voice-dna.md, {path}/character-bible.md (the cast's voice cards + tic budget), {path}/ENTITY_STATE.yaml.
+Read: {path}/manuscript/chapters/chapter-{N}.md, {path}/voice-dna.md, {path}/character-bible.md (the cast's voice cards; no-tics law), {path}/ENTITY_STATE.yaml.
 Run the cover-the-name test on ALL speaking characters.
 Fix: voice bleeding, missing subtext, thesaurus tags / tag-adverbs, tag/beat ratio, filler.
 Light naturalism only — leave heavy mess to the Disruptor. Touch ONLY dialogue + its immediate mechanics; never narrative prose. Introduce no continuity contradiction.
@@ -383,7 +400,7 @@ Preserve POV voice and facts. Edit in place. Report to {path}/evaluations/hook-c
 Dispatch: book-disruptor
 Prompt: "Disrupt chapter {N} of '{title}'.
 Project dir: {path}
-Read: {path}/manuscript/chapters/chapter-{N}.md, {path}/manuscript/chapters/chapter-{N}-report.md, {path}/voice-dna.md (anti-pattern budget), {path}/ENTITY_STATE.yaml.
+Read: {path}/manuscript/chapters/chapter-{N}.md, {path}/manuscript/reports/chapter-{N}-report.md, {path}/voice-dna.md (anti-pattern budget), {path}/ENTITY_STATE.yaml.
 Apply disruption operations scaled to chapter quality (2-4 for strong, 5-6 for predictable, 6-8 for weak). Simile Surgery (Pattern #11) is priority. Stay within the genre's anti-pattern budget.
 Preserve the emotional anchor: {anchor}. Do not break continuity.
 Edit in place. Write disruption report to: {path}/evaluations/disruption-chapter-{N}.md"
@@ -397,6 +414,20 @@ Project dir: {path}
 Read the new chapters since meta.last_updated_chapter: chapters {range}.
 Update {path}/ENTITY_STATE.yaml incrementally — new facts, knowledge gained (with learned_chapter + source), location/status changes, new objects/threads. NEVER overwrite a contradiction silently — log contradictions. Set meta.last_updated_chapter. Append to {path}/evaluations/entity-changelog.md"
 ```
+
+**Drift policy override.** If `STATE.yaml` carries `drift_check: every-chapter`, Step D.5
+(entity update), Step D.6 (shape audit) AND a `continuity-guardian` MANUSCRIPT AUDIT of the new
+chapter against all prior chapters run after EVERY chapter, before Step E — never batched. A
+CRITICAL continuity finding goes to `book-editor` before the evaluator sees the chapter.
+
+**Step D.6 — Shape audit (every 5 chapters, bash, no agent):**
+Run `python3 tools/shape_check.py {path}` from the repo root. It measures the SHAPE of every
+chapter so far (length, opening move, ending move, scene-break count, dialogue share, sentence
+rhythm) and flags uniformity — the "every chapter is the same chapter" tell no per-chapter
+evaluator can see. If it flags: (a) put the flagged signature into the next chapters' Writer
+prompts as a thing to avoid, and (b) if the run sits on finalized chapters, dispatch
+`book-editor` on the most recent offender (opening/closing paragraphs only — a signature
+change, not a rewrite). Run it once more in Phase 4 on the whole manuscript, `--strict`.
 
 **Step E — Mechanical Preprocess (bash, no agent):**
 Run directly with the Bash tool against `chapter-{N}.md`:
@@ -551,7 +582,7 @@ voice_dna:
 character_bible:
   created: false          # character-bible.md — REQUIRED deliverable of the architect's voice dispatch
   entries: 0              # named characters with a voice card + DISTINCTNESS GUARANTEE
-  tic_bearers: []         # the <=2-3 characters allowed to LEAD with a verbal tic (§3b tic budget)
+  tic_bearers: []         # ALWAYS empty — the author's no-tics law (architect §3b); kept so a non-empty list is a visible violation
 
 # Optional — present only for a book inside a series (see docs/SERIES.md).
 series:

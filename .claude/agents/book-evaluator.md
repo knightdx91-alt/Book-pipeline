@@ -77,18 +77,29 @@ Score each dimension from 6.0 to 10.0. The floor is the score.
 
 ### Dimension 3: CHARACTERS
 - **Cover-the-name test.** Can you identify speakers from dialogue alone?
-- **Tic-proliferation / device-bleed scan (the "everyone sounds alike" failure).** Flag if MORE than
-  ~2–3 characters in the cast lead with a verbal tic/catchphrase, or if two characters share the same
-  DEVICE (counting, listing, pricing, rating, cataloguing = one device in different coats), or if the
-  narrator's signature device has bled onto secondary characters so they quantify/catalogue the same
-  way. Any of these caps Characters at 7.5 — a cast distinguished only by catchphrases, or one where the
-  POV voice has infected the others, is not a distinct cast. Cross-check new named characters against
-  `character-bible.md`: a newcomer with no distinctness entry, or one whose tic duplicates an existing
-  character's, is a finding.
+- **NO-TICS scan (author's standing law: tic budget = 0, every book).** Flag if ANY character in the
+  cast — the narrator included — leads with a verbal tic, catchphrase, refrain or pet phrase (a line
+  that has come back a third time is a tic), or if any character carries a DEVICE (counting, listing,
+  pricing, rating, cataloguing = one device in different coats; retired for everyone), or if the
+  narrator's habits have bled onto secondary characters so they notice/quantify the same way. Any of
+  these caps Characters at 7.5 — a cast distinguished by catchphrases, or one where the POV voice has
+  infected the others, is not a distinct cast. Cross-check new named characters against
+  `character-bible.md`: a newcomer with no distinctness entry, or any card whose tic line is not
+  "none", is a finding. Cite the recurring line and its count.
+- **GESTURE TICS count too (author ruling 2026-10-18).** A repeated piece of stage business is a tic
+  even when every instance is worded differently: characters forever picking things up and setting
+  them down, nodding, swallowing, sighing, looking away, pausing "for a long moment", jaws setting,
+  breaths let out. Count the GESTURE CLASS across the chapter (and against the prior chapters you
+  read): reaching the chapter cap for one class (4, or one per 1,000 words in a long chapter — the
+  same rule `tic_report.py --gate` enforces), 3+ of one class inside 500 words, or a class that recurs
+  chapter after chapter, caps Characters at 7.5 and goes in the findings with the count. Use the gate's
+  number, so a chapter is never failed by you and passed by the gate (or the reverse). `tic_report.py --gate` measures this mechanically;
+  your job is the judgement call on the ones it cannot classify.
 - **Chaos check (genre-adjusted V3.2):** Does the chapter include character chaos moments?
   - Irrelevant thought present? (not plot-functional)
   - Cognitive distortion visible in behavior?
-  - Unprompted memory surfacing?
+  - Unprompted memory surfacing? It must be **triggered by the scene and return to it**. A stand-alone memory paragraph that drops in from nowhere breaks immersion: flag it.
+  - **Absence is not a defect.** The inverse is: a chaos device on a fixed cadence (a memory paragraph every chapter, the same size, the same kind of ending) is a tic. Compare with the previous chapters, and cap Characters at 7.5 if one has become a pattern (author ruling 2026-10-19).
   - Failed emotional management? (control breaking)
   - **Genre profiles (from 10-bestseller benchmark):**
     - Literary Fiction: 4-5/5 required. Cap at 7.5 without chaos. (Benchmark: Normal People 5/5, A Little Life 4/4)
@@ -461,6 +472,24 @@ Use this structure for every issue in the Revision Recommendations section. Vagu
 | **Why it fails** | The precise failure — not "this is weak" |
 | **Revision direction** | A specific executable instruction |
 | **Project rule?** | Yes / No — should this become a standing constraint? |
+
+**Your own replacement strings are prose, and they meet the Writer's bar.** When a finding gives exact
+new wording — a swap, a recast, or narration restored to keep a word floor — check each string before it
+goes in the table: the book's at-risk/spent lists, the voice-bank samples, the outline's plan sentences,
+and the previous chapters (`tic_report.py --echoes N` on a scratch copy is the floor, not the ceiling — it
+cannot see a reused frame or a moved repeat). In The Hour of Ash Ch.16 and Ch.17 a polish cycle's own
+restores and one-for-one swaps planted the next cycle's findings (a plan sentence echoed, a repeat moved
+one sentence over, a triad rebuilt). A fix that creates a finding is not a fix.
+
+**Count narrated traits by hand: a character's one physical state, re-noted, is a gesture tic.** The phrase
+and gesture gates cannot see a state the narration keeps returning to in fresh words (a judge's closed eyes,
+a man "waiting", a woman's stillness). Count each minor or recurring character's narrated trait across the
+chapter: more than 3 notes of the same state in one chapter, or 3 inside ~500 words, is a NO-TICS failure
+under Characters, even when `tic_report.py --gate` is clean. Hour of Ash Ch.11, 16, 18 and 22 each grew
+one (Ch.22: the iudex's closed eyes 11×, Valens's waiting 5×). Cut to the one or two notes that do work.
+Do the census EXHAUSTIVELY at cycle 0: every recurring character, every narrated state (talking on, breaking off, turning,
+facing, looking at an object, hands, posture, mood given to an infant), with line numbers. Hour of Ash Ch.25 lost two
+extra cycles because cycle 0 counted four states and each re-evaluation found more that had been there from the start.
 
 ### 7 Problem Types
 

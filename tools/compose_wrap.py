@@ -83,8 +83,8 @@ except ImportError as exc:
 PAPER_STOCKS = {
     "white50": 0.002252,   # IngramSpark white 50#
     "cream50": 0.0025,     # IngramSpark cream 50# -- CAUTION: IngramSpark's own cream
-                           # templates for the Saeren Chronicles (2026) came out at
-                           # ~0.00225"/pp (294pp=0.661", 306pp=0.687"). Pull the title's
+                           # templates issued in 2026 came out at ~0.00225"/pp
+                           # (294pp=0.661", 306pp=0.687"). Pull the title's
                            # template and pass paper.factor = spine/pages from it.
 }
 

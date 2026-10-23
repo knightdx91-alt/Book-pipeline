@@ -117,7 +117,7 @@ For each major character, define:
 **Want:** What they consciously pursue (external goal)
 **Need:** What they actually need to heal/grow (often opposite of want)
 **Arc:** How they change from lie → truth (or refuse to change)
-**Voice markers:** Speech patterns, vocabulary, verbal tics, sentence length
+**Voice markers:** Speech patterns, vocabulary, sentence length, evasions (NEVER a verbal tic — §3b)
 **Contradiction:** The thing about them that doesn't fit (makes them human)
 
 --- CHARACTER CHAOS (genre-adjusted V3.3) ---
@@ -328,6 +328,28 @@ and (e) the chapter-count logic. Then build the outline to match.
 ### Step 4 — sectioning. Do NOT reflexively print "ACT ONE / ACT TWO / ACT THREE."
 Use whatever the chosen structure implies (Parts, movements, dated sections, none at all). Internal scaffolding need not be visible to the reader.
 
+### Step 5 — the ANTI-PREDICTABILITY LEDGER (mandatory; closes the `## Macro-Structure` block)
+Structure is not only the macro shape — it is also the chapter-level reflexes a reader learns to
+predict by chapter six: every chapter opening the same way, every chapter ending on a punch-line,
+every chapter running establish → anomaly → escalate → close with three scene breaks. End the
+`## Macro-Structure` block with a table, ONE ROW PER CHAPTER:
+
+| Ch | Structural approach | Opening move | Ending move | Target words | Dialogue band | Theme |
+
+- **Structural approach** from the 7 types in Outline Quality Check #8 — no type in two consecutive
+  chapters, and no type on more than ~30% of chapters.
+- **Opening move** — e.g. mid-dialogue, mid-action, scene-setting (time/place), an object, a
+  claim/opinion, a question, a document/insert, a list, a long sensory spiral, a flat statement of
+  fact. No move three chapters running; no move on more than ~35% of chapters.
+- **Ending move** — e.g. a spoken line, a short punch, a question, a quiet image, a plain stop
+  mid-scene, a document fragment, an action unfinished, a long fade. Same limits as openings, AND
+  at least two chapters must end with NO pull — they simply stop. "Every chapter ends on a hook"
+  is itself a tell.
+- **Dialogue band** varies by chapter function (a two-hander and an interior chapter must not weigh
+  the same); **Theme** is `present` or `RECEDES` (at least 1–2 recede).
+The Writer is prompted from this ledger, and `tools/shape_check.py` audits the finished
+manuscript against exactly these reflexes — build the ledger so the audit passes by construction.
+
 ### Guard against your own defaults
 If the structure you're about to choose is 3-act with ~20 equal chapters and clean-quarter turns, STOP and re-choose — that is the failure mode this section exists to prevent. Variety must be DRIVEN BY THE STORY, not randomized; but "the story happens to want the exact same shape as the last four books" is not credible. Make the case in the `## Macro-Structure` block or pick differently.
 
@@ -421,10 +443,8 @@ For every character who speaks in 2+ scenes, a card the Writer and Dialogue Poli
 - Attention / worldview: [what they NOTICE and reduce the world to — the deepest differentiator]
 - Evasion — never says: [the words/registers/subject this character refuses]
 - Physicality / silence: [the body-tell or pause that stands in for a spoken tic]
-- Verbal tic: [NONE for most characters. Fill this ONLY if this character is one of the ≤2–3
-  designated tic-bearers in the TIC BUDGET below; otherwise write "none — distinguished by
-  worldview/syntax/evasion/physicality." A tic here must be EARNED (the character's psychology
-  surfacing), never decorative.]
+- Verbal tic: none — distinguished by worldview/syntax/evasion/physicality. [ALWAYS "none".
+  The author's standing law (§3b): no character in any book carries a verbal tic.]
 - DISTINCTNESS GUARANTEE: [one sentence — the sharpest marker + what it contrasts against]
 - Sample line: [one line only this character could say]
 ```
@@ -433,23 +453,25 @@ For every character who speaks in 2+ scenes, a card the Writer and Dialogue Poli
 The cover-the-name test, pre-solved. For each speaking character, the single sharpest marker that separates them from everyone else. If any two share their sharpest marker, differentiate further before finishing.
 | Character | Sharpest distinguisher | Contrast vs nearest character |
 
-### 3b. TIC BUDGET — the anti-"everyone has a catchphrase" rule (HARD)
-Distinctness is **NOT** "give every character a verbal tic." A cast where everyone has a catchphrase
-reads as machine-made — it is the single most common way a large cast collapses into one voice wearing
-different hats. Design the budget UP FRONT and record it in `character-bible.md`:
-- **≤2–3 characters in the WHOLE BOOK** may LEAD with a verbal tic, and each must be EARNED (it is that
-  character's psychology surfacing — e.g. a bookkeeper who numbers even his regrets). Name the tic-bearer
-  roster explicitly. **Everyone else is distinguished WITHOUT a catchphrase** — by attention/worldview,
-  syntax, evasion, and physicality/silence (the four axes on the voice card).
-- **No two characters may share a DEVICE.** Counting, listing, pricing, rating, quantifying, cataloguing
-  are the SAME device in different coats — assign each device to at most ONE character, and write the
-  one-device-per-character map into the bible.
+### 3b. NO TICS — the author's standing law (HARD, every book, permanently; ruled 2026-10-18)
+Distinctness is **NOT** "give a character a verbal tic." A cast with catchphrases reads as
+machine-made — it is the single most common way a cast collapses into one voice wearing different
+hats — and the author has ruled that the budget for it is **ZERO**. Record it in `character-bible.md`:
+- **Tic-bearer roster: NONE.** No character in the book — the narrator included — LEADS with a verbal
+  tic, catchphrase, refrain, pet phrase or signature line. Not two or three "earned" ones: none. Every
+  voice card's tic line reads `none — distinguished by <axis>`. **Everyone is distinguished WITHOUT a
+  catchphrase** — by attention/worldview, syntax, evasion, and physicality/silence (the four axes).
+- **No devices either.** Counting, listing, pricing, rating, quantifying, cataloguing are the SAME
+  device in different coats, and the device is retired for everyone — do not assign it to anyone.
+- **Motifs are OBJECTS and SITUATIONS, never lines.** A recurring image is fine; a recurring phrase
+  is a tic. List at most ~5 deliberate phrases for the style-gate ALLOWLIST, each capped at 3 uses
+  book-wide, and never plan a beat that depends on a character's line "landing again".
 - **No signature may repeat across the author's other books** (cross-book pattern rule).
-- **THE AMELIA LESSON (do not repeat it):** in an earlier book a quantifying/counting device and the
-  phrase "never once" calcified into a tic AND bled across multiple characters, until the cast started
-  sounding alike and a manuscript-wide de-tic was needed to fix it. Prevent it by construction: put the
-  tic-bearer roster + one-device-per-character map in the bible, and seed a **retired/at-risk phrase list**
-  (start it with "never once") so the Writer and `voice_wear_check.py` catch calcification early.
+- **THE AMELIA LESSON (why zero, not "a few"):** in an earlier book a quantifying/counting device and
+  the phrase "never once" calcified into a tic AND bled across multiple characters, until the cast
+  sounded alike and a manuscript-wide de-tic was needed. Earned tics spread exactly like unearned
+  ones. Seed the **retired/at-risk phrase list** (start it with "never once") so the Writer,
+  `voice_wear_check.py` and `tic_report.py --gate` catch calcification every chapter.
 
 ### 4. Anti-Pattern Budget (genre-adjusted)
 The quantitative guardrail the Disruptor enforces, set per genre (from `research/bestseller-dna.md`), expressed as density per 1,000 words:
@@ -460,6 +482,29 @@ The quantitative guardrail the Disruptor enforces, set per genre (from `research
 - Emotional temperature reports ("a wave of sadness washed over her"): [ceiling]
 This budget is what the Writer aims under and the Disruptor cuts down to.
 
+**PIPELINE DEFAULTS — the figurative-restraint standard (proven on The Hour of Ash; the author wants it in
+every book).** Write these into every `voice-dna.md` as binding, then tune only the numbers to the genre:
+- **Characterizing simile only.** A comparison may make the reader *see* a thing or *smile*; it may never
+  *interpret* a feeling or explain what a moment meant (that is the analytical simile, Pattern #11). Aim
+  ≤3/1k, gate ≤4/1k (`style_check.py --max-simile`). Under real fear or grief: none.
+- **"as if" / "as though" ≤1 per chapter**, and that one characterizing.
+- **No comparison used twice in the book**, and rotate the narrator's comparison SOURCE domains (no one
+  domain supplies more than about half of a chapter's comparisons).
+- **No metaphor-stacking** ("her body a [noun] of [noun]"), no lyrical escalation at a climax, no closing
+  aphorism. One characterizing comparison at most per heat scene; ≤1 per chapter in the final act.
+- **Present-tense generalisations inside past narration ≤1 per chapter** ("as a man does when…") —
+  `tic_report.py --gate` enforces it.
+- **Figurative load ≤6 markers/1k and long sentences (40+ words) ≤18%** — `metaphor_check.py` catches the
+  bare metaphors and "as ADJ as" similes `style_check` cannot see. Calibrate the ceilings to the register.
+- **Em-dash ≤4 per chapter, absolute** (semicolons do the work); spaced en-dashes count.
+- **Assign each character a figurative rule on their card** (e.g. "never uses a simile in speech").
+  Characters who never compare aloud are a cheap, strong distinctness axis.
+- **NO FORESHADOWING by default** (`style_check.py --max-foreshadow 0`): a retrospective narrator never
+  reaches forward to spoil an unreached outcome. Relax only by an author ruling recorded in STATE.yaml.
+- **Spent/closed lists in the character bible.** Every distinctive image, frame or body-channel used on
+  the page is logged as USED / SPENT / CLOSED with a count, and downstream agents may not rebuild a
+  closed one in new words. This is what keeps a long book from re-using its best moves.
+
 ### 5. Benchmark Samples
 Name the 2-3 voice-bank samples (from controlled / breaking / irrelevant-thought) that best embody the global voice — the canonical targets every downstream agent measures against.
 
@@ -468,7 +513,7 @@ Name the 2-3 voice-bank samples (from controlled / breaking / irrelevant-thought
 1. **Read STATE.yaml and research/ first.** Your foundation must build on the Researcher's findings.
 2. **Theme is a question, never an answer.**
 3. **Characters must be distinguishable AND chaotic.** Run the cover-the-name test. Then verify each character has irrelevant obsession, cognitive distortion, unprompted memory, and failed emotional management.
-3b. **`character-bible.md` is a REQUIRED deliverable** — one entry per named character, each ending in a DISTINCTNESS GUARANTEE, PLUS the §3b TIC BUDGET made explicit: the ≤2–3-character tic-bearer roster, the one-device-per-character map, and a retired/at-risk-phrase list. Distinctness lives on the four axes (worldview, syntax, evasion, physicality); a verbal tic is rare, earned seasoning — never the default. Run the cover-the-name test against the finished bible.
+3b. **`character-bible.md` is a REQUIRED deliverable** — one entry per named character, each ending in a DISTINCTNESS GUARANTEE, PLUS the §3b NO-TICS law made explicit: `Tic-bearer roster: NONE`, no devices for anyone, and a retired/at-risk-phrase list. Distinctness lives ONLY on the four axes (worldview, syntax, evasion, physicality); a verbal tic is never allowed. Run the cover-the-name test against the finished bible.
 4. **The outline is a guide, not a prison.** Tell the Writer which beats are NON-NEGOTIABLE and which can flex. Flag where the Writer should follow an impulse if one emerges.
 5. **Emotional anchors, not numbers.** Never write "intensity 4/10." Write "the reader remembers the pen that was still warm."
 6. **Anticipate Claude's defaults.** In Writer Warnings, flag where the Writer might default to: competence cascade, analytical simile, metacognitive narration, emotional temperature report. Give specific counter-instructions.

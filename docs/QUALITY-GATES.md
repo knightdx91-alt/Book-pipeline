@@ -160,10 +160,131 @@ self-repetition per POV** (no configuration; it finds phrases a POV repeats acro
 chapters), and optional **named-device caps** per character. Multi-POV books get a
 `feedback/pov-map.txt` (`chapter-N: Name` per line); single-POV books can skip it.
 
-### Other per-book checkers
+### `tic_report.py --gate` — the no-tics gate (shipped with every book)
 
-Books that needed them grew them; copy any into a book with the same problem:
-`rhythm_check.py`, `tic_report.py`, `show_tell_check.py`, `metaphor_check.py`.
+```bash
+python3 books/<slug>/tools/tic_report.py --gate      # every chapter
+```
+
+The author's standing law is that **no character, narrator included, carries a verbal tic,
+catchphrase, refrain or device — in any book, ever.** `voice_wear_check.py` catches a POV
+repeating itself across chapters (its self-repetition findings FAIL, not warn). This gate
+closes the other door: any content-rich phrase of 3–6 words recurring **3+ times across the
+whole book**, and any spoken phrase of 3+ words recurring in dialogue (a catchphrase
+forming), fails the chapter. The only exemptions are the few allowlisted object-motif
+phrases (≤5, each capped at 3 uses) and a short list of unavoidable world terms (place
+names, titles). On a finished unguided draft it typically finds a dozen lines the writer
+never noticed — "for the first time" fourteen times, a character's favourite saying six
+times — which is exactly the creep it exists to stop.
+
+It also carries a **gesture layer**, because a tic does not need repeated words: a cast
+that keeps picking things up and setting them down, nodding, swallowing, looking away or
+pausing "for a long moment" is repeating stage business with the wording varied. The
+script counts gesture *classes* by meaning (object handling, nods, shrugs, sighs,
+swallows, breath beats, jaws, looking/turning away, "a long moment", hair, grips, eyes,
+lips, head shakes, bending over the work) book-wide and per chapter, and fails three shapes of cluster: **a scene
+running on one gesture** (3+ of a class within 500 words — the reader-visible tic: a
+headmistress who sets down the paper, takes off her spectacles, picks them up, turns them
+over, puts them back on, all between lines of one conversation); a chapter over its cap
+(4, or one per 1,000 words for a long chapter; reaching the cap fails); and, once the manuscript has 20,000 words,
+more than 0.3 per 1,000 words across the book. Measured on an earlier finished book it
+found "a long moment" 65 times and object handling 49 times with eight scene clusters —
+the exact reflex a reader had noticed. The handling class is deliberately narrow
+(set/put down, pick up, take out of, put back, hold out, turn over) so that functional
+actions and idioms ("put money on it", unpacking a bag) do not fire it; the evaluator
+judges the business the regex cannot classify. Extend `GESTURE_CLASSES` in the book's
+copy when a new piece of business starts to recur.
+
+A third layer, **RHYTHM & VOICE REFLEXES**, counts narration only (speech and italic documents
+excluded): **AND-CHAINS**, sentences with four or more "and"s, capped at max(9, words ÷ 900) per chapter
+(one designed held sentence is a device; a dozen is the narrator's default rhythm — one earlier book ran 2–8
+early and drifted to 20–26 late), and **CREDENTIAL ASIDES**, the book-specific phrases by which a narrator
+files the world under her own expertise (`CREDENTIAL_PATTERNS` in the book's copy; capped at 4 per chapter).
+The echo scan also catches **PRONOUN-SWAPPED** echoes: 5–6-word phrases compared with I/she/he/we/they
+(and the object and possessive forms) folded together, so "She stayed where she was" in one chapter and "I
+stayed where I was" in a later one count as the same move. A match must carry a content word of 5+ letters
+that is not a speech verb or a spatial idiom ("at the bottom of" stays out).
+
+The echo scan also lists **COMMAND ECHO candidates**: a short quoted order whose verb returns at the head of
+the next narration paragraph ("Hold that corner." / "I held it…"), the narrator answering an order by repeating
+it as compliance. Defiance and plain narrative match too, so the list is judged by hand and never fails; a
+book allows about three real ones. It exists because the move slipped past the writer, the disruptor and the
+bible in Hour of Ash Ch.9.
+
+The **ECHO SCAN** (`--echoes N`) also reads the book's `voice-bank/samples/` when there is one: a 5+-word phrase
+shared with a benchmark sample is listed as an echo from "voice-bank", because the samples are register targets,
+never text to reuse (shorter matches are left out; the samples share the book's own nouns).
+
+It also counts **NEGATION PIVOTS**: a short negated clause hinged on a semicolon to a pronoun that says
+what happened instead ("the mule did not pull; she sat back"). That is define-by-negation in miniature,
+and it reads as a device quickly. The cap is 1 per chapter, and the gate fails at 3 book-wide. The pattern
+is deliberately narrow, so an ordinary negative sentence followed by a new one does not fire.
+Two **NARRATOR MOVES** are capped at 1 per chapter: a paragraph opening "So I…" (the narrator's consequence
+hinge) and "before I had decided/thought…" (the body outrunning the mind). A "So" opener in 4+ consecutive
+chapters prints a WATCH without failing, so the streak shows before it hardens.
+A **SHORT REPLY** refrain fails too: the same one- or two-word spoken line ("No.", "Yes.", "Go on.") more than
+4 times in a chapter, names called out excepted. The phrase layers start at three words, so a one-word reply
+could repeat unseen (Hour of Ash Ch.11 had "No." eleven times).
+
+Because a capped habit moves rather than dies, the whole **HINGE FAMILY** of paragraph openers (So / Then /
+After that / Afterward / Later / Next) is also capped, at max(3, words ÷ 2,500) per chapter.
+
+A second layer, **PROP FIDGET**, follows a single object through a scene — including "it" and "them"
+back to the prop named last — and fails when it is fidgeted with (turned, set down, picked up, taken
+off, put back, held in the fingers or the mouth) 3+ times within 400 words. That is the exact shape of
+an earlier book's spectacles scene, where the prop does the acting between lines of dialogue. Real
+action (fighting for a bag, packing a parcel) uses other verbs and does not fire.
+
+### `shape_check.py` — the predictability audit (shared, book-agnostic)
+
+```bash
+python3 tools/shape_check.py books/<slug>            # every ~5 chapters, from the repo root
+python3 tools/shape_check.py books/<slug> --strict   # Phase 4: exit 1 on any flag
+```
+
+No per-chapter gate can see the loudest machine tell, which lives *between* chapters: every
+chapter the same length, opening the same way, closing on a punch-line, with the same number
+of scene breaks and the same dialogue share. This script measures the shape of every chapter
+and flags uniformity (`LEN-CLUSTER`, `OPEN-RUN`, `END-RUN`, `PUNCH-REFLEX`, `DIALOGUE-FLAT`,
+`BREAKS-SAME`, `RHYTHM-FLAT`, …). It is the mechanical counterpart of the architect's
+Anti-Predictability Ledger (book-architect §0.5 Step 5): the ledger plans the variety, the
+Writer is prompted from it, and this script proves the manuscript actually kept it. A flag
+on finalized chapters means revising the most recent offender's opening or closing — a
+signature change, not a rewrite.
+
+### The rest of the kit — shipped with every new book
+
+Proven on *The Hour of Ash* and seeded into every book by `new-book.sh`:
+
+- **`metaphor_check.py`** — figurative load and sentence shape. `style_check` counts only simile
+  markers; this finds bare metaphor ("he was a furnace", "the machine of himself"), "as ADJ as"
+  similes and appositive image-nouns by construction, and the share of 40+-word sentences.
+  Ceilings: ≤6 figurative markers per 1,000 words, ≤18% long sentences (calibrate per register).
+- **`rhythm_check.py`** — the observation / reflection / expanded-reflection paragraph template.
+- **`show_tell_check.py`** — dialogue share, filter verbs and abstraction; flags the heaviest
+  telling paragraphs so they become scene before the evaluator sees them.
+- **`check_chapter.sh N`** — runs every gate for chapter N in one go (style, grammar, rhythm,
+  show/tell, voice-wear, the tic gate, the echo scan, metaphor, word count, shape audit) and
+  **exits non-zero if any line says FAIL**. A chapter is mechanically clean only when it prints
+  `ALL MECHANICAL GATES CLEAN`.
+- **`build_pdf.py`** — a 6×9 reading-copy PDF of the chapters so far (`--upto N`); title from STATE.yaml.
+
+### The figurative-restraint standard (pipeline default)
+
+The architect writes these into every `voice-dna.md`; the writer drafts under them; the gates and
+the evaluator enforce them:
+
+- comparisons are **characterizing** (make the reader see or smile), never **analytical** (never
+  interpret a feeling) — aim ≤3/1k, gate ≤4/1k; none under real fear, grief or at a climax;
+- "as if / as though" ≤1 per chapter; no comparison used twice in a book; rotate source domains;
+- no metaphor-stacking, no lyrical escalation, no closing aphorism;
+- ≤1 present-tense generalisation in past narration per chapter;
+- em-dash ≤4 per chapter, absolute;
+- **no foreshadowing** (`style_check --max-foreshadow 0` is the default; relax only by author ruling);
+- each character carries a figurative rule on their card; some never compare aloud;
+- **narrated states count like gestures**: no character's physical state noted more than 3 times
+  a chapter (the evaluator counts them by hand, exhaustively, on the first pass);
+- the character bible keeps **SPENT / CLOSED lists**, and nothing on them is rebuilt in new words.
 
 ### The word floor
 
@@ -214,14 +335,12 @@ polishes chapters, and no amount of chapter polish fixes a spine.
 ## The running order
 
 ```bash
-# per chapter, after the agent loop
-python3 books/<slug>/tools/style_check.py
-python3 books/<slug>/tools/grammar_check.py
-python3 books/<slug>/tools/voice_wear_check.py   # whole-book; run periodically
+# per chapter, after the agent loop — every gate in one command (non-zero exit = not clean)
+bash books/<slug>/tools/check_chapter.sh N
 git add -A && git commit -m "finalize chapter N"
 
-# every 3-5 chapters
-#   entity-tracker UPDATE, continuity-guardian audit
+# every chapter (the drift policy proven on The Hour of Ash)
+#   entity-tracker UPDATE, continuity-guardian audit of the new chapter against ALL prior chapters
 
 # at the end
 wc -w books/<slug>/manuscript/chapters/chapter-*.md    # word floor

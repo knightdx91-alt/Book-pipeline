@@ -17,7 +17,7 @@ only adds what PDF/X-1a requires around them:
 
   * Root /OutputIntents  -> one /GTS_PDFX intent whose DestOutputProfile is
                             tools/icc/default_cmyk.icc (the same Ghostscript
-                            profile the accepted Saeren Book One cover carries)
+                            profile accepted IngramSpark covers carry)
   * Info /GTS_PDFXVersion (PDF/X-1a:2001), /Trapped /False, /Title
   * /TrimBox + /BleedBox on every page (= MediaBox, a full-bleed wrap)
   * header version 1.3, as Ghostscript writes for PDF/X-1a

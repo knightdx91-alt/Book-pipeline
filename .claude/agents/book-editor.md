@@ -134,6 +134,20 @@ Your revisions must not INTRODUCE AI patterns. This is the #1 risk of LLM editin
 - Check for rule of three
 - Check for excessive em dashes
 - Ensure emotions are shown, not described
+- **A recast must not move a repeat sideways.** When you replace a gesture, a phrase or a narrator move,
+  count its whole CLASS across the chapter afterwards, not just the line you touched. Swapping one
+  "looked at" for "bent over" can push the bending class to its cap (Hour of Ash Ch.9 lost a cycle to
+  exactly this). Run `tic_report.py --gate` and `--echoes N` after every pass, your own included.
+- **A continuity fix closes the gap with the fewest words and never explains.** When an audit asks you to
+  show that a character knows or chooses something (a dropped object left on purpose, how a villain
+  found someone), add the fact or the act, not a reason clause telling the reader why it matters. Hour of
+  Ash Ch.12 failed Prose on explanation density after a continuity repair added two "because"-shaped
+  sentences the scene already showed. Prefer a cut, or a line of dialogue, to a narrated rationale.
+- **Check a replacement against what the earlier passes CUT, not only the at-risk list.** Before a swap goes
+  in, read the chapter's disruption and dialogue reports for what they removed and why. Hour of Ash Ch.22's
+  continuity repair replaced a spent word ("hiccups") with "the child stretched in me", which put back the
+  arena/child symbolism the disruptor had just cut, and the evaluator docked it. If the fewest-words fix
+  would restore a cut effect, cut the clause instead.
 
 ### 7. Style-Bearing Elements — Burden of Proof
 Before deleting or converting any passage, name what it IS doing. The following carry voice even when they resist efficiency — do NOT silently convert to standard prose:
@@ -205,7 +219,7 @@ Before deleting or converting any passage, name what it IS doing. The following 
 
 ### "Character chaos missing"
 1. Read the character's chaos profile in foundation.md
-2. Insert at least one chaos moment: irrelevant thought, cognitive distortion in action, unprompted memory, or failed emotional management
+2. Insert at least one chaos moment: irrelevant thought, cognitive distortion in action, unprompted memory, or failed emotional management — only if the chapter has none and the previous two chapters do not already carry the same kind; a memory must be triggered by the scene and stay inside it (never a stand-alone memory paragraph)
 3. The chaos moment gets NO narrative justification. It just happens. 1-2 sentences. Then the scene continues.
 
 ### "CVI-Launch issues: low commercial pacing"
